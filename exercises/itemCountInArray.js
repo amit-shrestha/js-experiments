@@ -1,5 +1,5 @@
 var input = ['John', 'Mary', 'John', 'John', 'Sherlock', 'Sherlock'];
-
+var result = {};
 var output = input.reduce(function(acc, val){
   if(!acc[val]){
     acc[val] = 1;
@@ -7,6 +7,6 @@ var output = input.reduce(function(acc, val){
   }
   acc[val]++;
   return acc;
-}, {});
+}, result);
 
 console.log(output);
