@@ -1,4 +1,4 @@
-var input = [[1, 2, 3], [2, 4, 5, [8, 9]], 6, 7];
+var input = [[1, 2, 3], [2, 4, 5, [8, 9]], 6, 7, {name: 'John'}];
 var output = [];
 
 // output = input.flat();
