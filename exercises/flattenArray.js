@@ -1,4 +1,4 @@
-var input = [[1, 2, 3], [2, 4, 5], 6, 7];
+var input = [[1, 2, 3], [2, 4, 5, [8, 9]], 6, 7];
 var output = [];
 
 // output = input.flat();
@@ -7,7 +7,7 @@ var output = [];
 //Alternative
 for(var i=0;i<input.length;i++){
   if(!checkArray(input[i])){
-    if(!checkRepeatition(input[i])){
+    if(checkRepeatition(input[i])==-1){
       output.push(input[i]);
     }
   }else{
@@ -22,11 +22,26 @@ function checkArray(val){
 }
 
 function checkRepeatition(number){
-  for(var j=0;j<output.length;j++){
-    if(output[j]==number){
-      return true;
-    }
-  }
-  return false;
+  return output.indexOf(number);
 }
 console.log(output);
+
+//Alternative
+function flatArray(input, acc){
+  var output = input.reduce(function(arr, val){
+    if(Array.isArray(val)){
+      arr = flatArray(val, arr);
+    }else if(arr.indexOf(val) == -1){
+      arr.push(val);
+    }
+    return arr;
+  }, acc);
+  return result;
+}
+
+console.log(flatArray(input, []));
+
+
+
+
+
