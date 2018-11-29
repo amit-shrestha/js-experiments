@@ -3,16 +3,77 @@ var slider = document.getElementById('slider-container');
 var images = document.getElementsByClassName('images');
 var nextBtn = document.getElementById('rbtn');
 var previousBtn = document.getElementById('lbtn');
+var dotsBtn = document.getElementsByClassName('dot');
+
+dotsBtn[0].addEventListener('click', function(e){
+  if(flag==1){
+    flag=-1;
+    change=1;
+    count=0;
+    clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
+    newInterval = setInterval(slide, 1);
+  }else if(flag==-1){
+    count=0;
+    clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
+    newInterval = setInterval(slide, 1);
+  } 
+});
+
+dotsBtn[1].addEventListener('click', function(e){
+  if(flag==1){
+    flag=-1;
+    change=1;
+    count=1;
+    clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
+    newInterval = setInterval(slide, 1);
+  }else if(flag==-1){
+    flag=1;
+    change=-1;
+    count=1;
+    clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
+    newInterval = setInterval(slide, 1);
+  } 
+});
+
+dotsBtn[2].addEventListener('click', function(e){
+  if(flag==1){
+    count=2;
+    clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
+    newInterval = setInterval(slide, 1);
+  }else if(flag==-1){
+    flag=1;
+    change=-1;
+    count=2;
+    clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
+    newInterval = setInterval(slide, 1);
+  } 
+});
 
 nextBtn.addEventListener('click', function(e){
   if(flag==1){
     clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
     newInterval = setInterval(slide, 1);
   }else if(flag==-1){
     flag=1;
     change=-1;
     count++;
     clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
     newInterval = setInterval(slide, 1);
   } 
 });
@@ -23,9 +84,13 @@ previousBtn.addEventListener('click', function(e){
     change=1;
     count--;
     clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
     newInterval = setInterval(slide, 1);
   }else if(flag==-1){
     clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
     newInterval = setInterval(slide, 1);
   } 
 });
@@ -37,10 +102,10 @@ var coordinate = {
 var flag = 1;
 var change = -1;
 var width = 750;
-var move = 1;
+var move = 2;
 var count = 0;
 var wait = 1000;
-var animationDelay = 1;
+var animationDelay = 10;
 var hold;
 var mainInterval;
 var newInterval;
@@ -57,7 +122,7 @@ function slide(){
   if(coordinate.y==count*width*change*flag){
     clearInterval(newInterval);
     clearInterval(mainInterval);
-    hold = setInterval(main, 2000);
+    hold = setTimeout(main, 2000);
     if(flag == 1){
       count++;
     }else if(flag == -1){
@@ -74,7 +139,6 @@ function slide(){
 }
 
 function main(){
-  clearInterval(hold);
   mainInterval = setInterval(slide, animationDelay);
 }
 
