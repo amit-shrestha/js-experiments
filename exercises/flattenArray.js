@@ -4,7 +4,7 @@ var output = [];
 // output = input.flat();
 // console.log(output);
 
-//Alternative
+//Using For loop
 for(var i=0;i<input.length;i++){
   if(!checkArray(input[i])){
     if(checkRepeatition(input[i])==-1){
@@ -24,22 +24,22 @@ function checkArray(val){
 function checkRepeatition(number){
   return output.indexOf(number);
 }
-console.log(output);
+console.log('Using For loop', output);
 
-//Alternative
-function flatArray(input, acc){
-  var output = input.reduce(function(arr, val){
+//Using reduce
+function flatArray(input, result){
+  var output = input.reduce(function(array, val){
     if(Array.isArray(val)){
-      arr = flatArray(val, arr);
-    }else if(arr.indexOf(val) == -1){
-      arr.push(val);
+      array = flatArray(val, array);
+    }else if(array.indexOf(val)==-1){
+      array.push(val);
     }
-    return arr;
-  }, acc);
-  return result;
+    return array;
+  }, result);
+  return output;
 }
 
-console.log(flatArray(input, []));
+console.log('Using Reduce', flatArray(input, []));
 
 
 

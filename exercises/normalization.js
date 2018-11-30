@@ -21,7 +21,7 @@ var people = [{
   }],
 }];
 
-var output = [];
+var output = {};
 var obj = {};
 
 function normalize(input){
@@ -32,15 +32,37 @@ function normalize(input){
       children: []
     };
     if(input[i].children===undefined){
-      output.push(obj);
+      output[obj.id] = obj;
     }else{
       for(var j=0;j<(input[i].children).length;j++){
         (obj.children).push(input[i].children[j].id);
       }
-      output.push(obj);
+      output[obj.id] = obj;
       normalize(input[i].children);
     }
   }
 }
 normalize(people);
-console.log(output);
+console.log('Using For loop', output);
+//Using reduce
+function normalization(input, result){
+  var res = input.reduce(function(acc, val){
+    var obj = {};
+    obj.id = val.id;
+    obj.name = val.name;
+    obj.children = [];
+    if(val.hasOwnProperty('children')){
+      val.children.forEach(function(child){
+        obj.children.push(child.id); 
+      });
+      acc[obj.id] = obj;
+      normalization(val.children, acc);
+    }else{
+      acc[obj.id] = obj;
+    }
+    return acc;
+  }, result);
+  return res;
+}
+console.log('Using Reduce', normalization(people, {}));
+
