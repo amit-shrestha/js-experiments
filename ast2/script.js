@@ -1,12 +1,10 @@
 mainHeight = 500;
 mainWidth = 750;
-numberOfBoxes = 10;
+numberOfBoxes =10;
+var boxArray=[];
+var properties={};
+var res;
 var container = document.getElementById('container');
-container.style.width = mainWidth+'px';
-container.style.height = mainHeight+'px';
-container.style.border = '2px solid red';
-container.style.position = 'relative';
-container.style.left = '25%';
 
 function getRandomNumber(min, max){
   return Math.floor(Math.random()*(max-min)+min);
@@ -30,17 +28,29 @@ function getRandomDirection(){
   return direction;
 }
 function detectPreCollision(property){
-  boxArray.forEach(function(val){
-    console.log('detectPreCollision');
-    console.log(property);
-    if(property.x<(val.x+val.width) && (property.x+property.width)>val.x && property.y<(val.y+val.height) && (property.y+property.width)>val.y==true){
-      console.log('overlap detected');
+  for(var i=0;i<boxArray.length;i++){
+    if(property.x<boxArray[i].x+boxArray[i].width && property.x+property.width>boxArray[i].x && property.y<boxArray[i].y+boxArray[i].height && property.y+property.height>boxArray[i].y){
       return true;
     }
-    return false;
-  });
+  }
 }
-var properties={};
+function generateProperties(){
+  do{
+    properties={
+      width: getRandomNumber(30, 50), 
+      height: getRandomNumber(30, 50),
+      x: getRandomNumber(0, 700), 
+      y:getRandomNumber(0, 450),   
+      color: getRandomColor(),
+      xDirection: getRandomDirection(),
+      yDirection: getRandomDirection()
+    }
+    var res = detectPreCollision(properties);
+  }while(res);
+  var box = new Box(properties);
+  boxArray.push(box);
+  box.drawBox();
+}
 function Box(properties){
   var that = this;
   this.x = properties.x;
@@ -91,36 +101,16 @@ function Box(properties){
     });
   }
 }
-var boxArray=[];
-var res = false;
 function Game(){
   var interval;
-  var j = 0;
+  container.style.width = mainWidth+'px';
+  container.style.height = mainHeight+'px';
+  container.style.border = '2px solid red';
+  container.style.position = 'relative';
+  container.style.left = '25%';
   this.init = function(){
     for(var i=0;i<numberOfBoxes;i++){
-      properties={
-        width: getRandomNumber(30, 50), 
-        height: getRandomNumber(30, 50),
-        x: getRandomNumber(0, mainWidth-properties.width), 
-        y:getRandomNumber(0, mainHeight-properties.height),   
-        color: getRandomColor(),
-        xDirection: getRandomDirection(),
-        yDirection: getRandomDirection()
-      }
-      if(j!=0){
-        console.log('test');
-        console.log(res);
-        res = detectPreCollision(properties);
-        console.log(res);
-      }
-      if(!res){
-        var box = new Box(properties);
-        boxArray.push(box);
-        j++;
-        box.drawBox();
-      }else{
-        i--;
-      }
+      generateProperties();
     }
     interval = setInterval(this.move, 10);
   }
@@ -130,5 +120,4 @@ function Game(){
     });
   }
 }
-
 new Game().init();
