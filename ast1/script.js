@@ -1,145 +1,102 @@
-var container = document.getElementById('slider-container-wrapper');
-var slider = document.getElementById('slider-container');
-var images = document.getElementsByClassName('images');
-var nextBtn = document.getElementById('rbtn');
-var previousBtn = document.getElementById('lbtn');
-var dotsBtn = document.getElementsByClassName('dot');
+function imageCarousel(sliderContainer, width, height, wait, animationDelay){
+  var slider = document.getElementById(sliderContainer);
+  var images = slider.getElementsByTagName('img');
+  
+  var container = document.createElement('div');
+  container.setAttribute('id', 'slider-container-wrapper');
+  container.appendChild(slider); 
+  
+  var nextBtn = document.createElement('img');
+  nextBtn.src = './images/chevron-right.png';
+  
+  var previousBtn = document.createElement('img');
+  previousBtn.src = './images/chevron-left.png';
+  
+  nextBtn.setAttribute('id', 'rbtn');
+  previousBtn.setAttribute('id', 'lbtn');
 
-dotsBtn[0].addEventListener('click', function(e){
-  if(flag==1){
-    flag=-1;
-    change=1;
-    count=0;
-    clearInterval(mainInterval);
-    clearInterval(newInterval);
-    clearTimeout(hold);
-    newInterval = setInterval(slide, 1);
-  }else if(flag==-1){
-    count=0;
-    clearInterval(mainInterval);
-    clearInterval(newInterval);
-    clearTimeout(hold);
-    newInterval = setInterval(slide, 1);
-  } 
-});
+  var dotsBtn = document.createElement('div');
+  dotsBtn.setAttribute('id', 'dots');
 
-dotsBtn[1].addEventListener('click', function(e){
-  if(flag==1){
-    flag=-1;
-    change=1;
-    count=1;
-    clearInterval(mainInterval);
-    clearInterval(newInterval);
-    clearTimeout(hold);
-    newInterval = setInterval(slide, 1);
-  }else if(flag==-1){
-    flag=1;
-    change=-1;
-    count=1;
-    clearInterval(mainInterval);
-    clearInterval(newInterval);
-    clearTimeout(hold);
-    newInterval = setInterval(slide, 1);
-  } 
-});
+  for(var i=0;i<images.length;i++){
+    images[i].setAttribute('class', 'images');
+    dotsBtn.appendChild(document.createElement('span'));
+  }
 
-dotsBtn[2].addEventListener('click', function(e){
-  if(flag==1){
-    count=2;
-    clearInterval(mainInterval);
-    clearInterval(newInterval);
-    clearTimeout(hold);
-    newInterval = setInterval(slide, 1);
-  }else if(flag==-1){
-    flag=1;
-    change=-1;
-    count=2;
-    clearInterval(mainInterval);
-    clearInterval(newInterval);
-    clearTimeout(hold);
-    newInterval = setInterval(slide, 1);
-  } 
-});
+  var dots = dotsBtn.getElementsByTagName('span');
+  for(var j=0;j<dots.length;j++){
+    dots[j].setAttribute('class', 'dot');
+  }
 
-nextBtn.addEventListener('click', function(e){
-  if(flag==1){
-    clearInterval(mainInterval);
-    clearInterval(newInterval);
-    clearTimeout(hold);
-    newInterval = setInterval(slide, 1);
-  }else if(flag==-1){
-    flag=1;
-    change=-1;
-    count++;
-    clearInterval(mainInterval);
-    clearInterval(newInterval);
-    clearTimeout(hold);
-    newInterval = setInterval(slide, 1);
-  } 
-});
+  container.appendChild(nextBtn);
+  container.appendChild(previousBtn);
+  container.appendChild(dotsBtn);
+  
+  document.body.appendChild(container);
 
-previousBtn.addEventListener('click', function(e){
-  if(flag==1){
-    flag=-1;
-    change=1;
-    count--;
-    clearInterval(mainInterval);
-    clearInterval(newInterval);
-    clearTimeout(hold);
-    newInterval = setInterval(slide, 1);
-  }else if(flag==-1){
-    clearInterval(mainInterval);
-    clearInterval(newInterval);
-    clearTimeout(hold);
-    newInterval = setInterval(slide, 1);
-  } 
-});
+  container.style.width = width+'px';
+  container.style.height = height+'px';
+  slider.style.width = width*images.length+'px';
+  slider.style.height = height+'px';
 
-container.style.left = '25%';
-var coordinate = {
-  y: 0
-};
-var flag = 1;
-var change = -1;
-var width = 750;
-var move = 2;
-var count = 0;
-var wait = 1000;
-var animationDelay = 10;
-var hold;
-var mainInterval;
-var newInterval;
-function slide(){
-  slider.style.left = coordinate.y+'px';
-  console.log(count);
-  if(coordinate.y==((images.length-1)*width*change)){
-    change = 1;
-    flag = -1;
-  }else if(coordinate.y==0){
-    change = -1;
-    flag =1;
-  } 
-  if(coordinate.y==count*width*change*flag){
-    clearInterval(newInterval);
-    clearInterval(mainInterval);
-    hold = setTimeout(main, 2000);
-    if(flag == 1){
+  var y = 2;
+  var flag = 1;
+  var change = -1;
+  var count = 0;
+  var move = 1;
+  var mainInterval;
+  var newInterval;
+  var hold;
+
+  this.slide = function(){
+    slider.style.left = y+'px';
+    if(y==((images.length-1)*width*change)){
+      change = 1;
+      flag = -1;
+    }else if(y == 0){
+      change = -1;
+      flag = 1;
+    }
+    if(y==count*width*change*flag){
+      clearInterval(newInterval);
+      clearInterval(mainInterval);
+      hold = setTimeout(this.init, 1000);
+      if(flag == 1){
+        count++;
+      }else if(flag == -1){
+        count--;
+      }
+    }
+    y += move*change;
+  }
+
+  this.init = function(){
+    mainInterval = setInterval(this.slide, 10);
+  }
+
+  nextBtn.addEventListener('click', function(e){
+    if(flag==-1){
+      flag=1;
+      change=-1;
       count++;
-    }else if(flag == -1){
+    }
+    clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
+    newInterval = setInterval(this.slide, 1);
+  });
+
+  previousBtn.addEventListener('click', function(e){
+    if(flag==1){
+      flag=-1;
+      change=1;
       count--;
     }
-    if(count>=3){
-      count=1;
-    }
-    if(count<=0){
-      count=0;
-    }
-  }
-  coordinate.y+=move*change;
-}
+    clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
+    newInterval = setInterval(this.slide, 1);
+  });
 
-function main(){
-  mainInterval = setInterval(slide, animationDelay);
 }
-
-main();
+new imageCarousel('slider-container', 750, 500, 1000, 10).init();

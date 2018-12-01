@@ -1,12 +1,9 @@
 #slider-container-wrapper{
-  width: 750px;
-  height: 500px;
   position: relative;
   overflow: hidden;
+  left: 25%;
 }
 #slider-container{
-  width: 2250px;
-  height: 500px;
   position: absolute;
 }
 #slider-container img{
@@ -40,6 +37,7 @@
   border-radius: 50%;
   background-color: lightgrey;
   display: inline-block;
+  margin-left: 10px;
 }
 .dot:hover{
   background-color: white;
