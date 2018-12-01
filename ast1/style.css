@@ -1,7 +1,7 @@
 #slider-container-wrapper{
   position: relative;
   overflow: hidden;
-  left: 25%;
+  margin: auto;
 }
 #slider-container{
   position: absolute;
@@ -28,8 +28,8 @@
 #dots{
   z-index: 1;
   position: absolute;
-  top: 470px;
-  right: 374px;
+  top: 94%;
+  right: 44%;
 }
 .dot{
   height: 15px;
@@ -39,7 +39,7 @@
   display: inline-block;
   margin-left: 10px;
 }
-.dot-active{
+.active{
   height: 15px;
   width: 15px;
   border-radius: 50%;
@@ -47,6 +47,6 @@
   display: inline-block;
   margin-left: 10px;
 }
-.dot:hover, .dot-active:hover{
+.dot:hover, .active:hover{
   background-color: blue;
 }

@@ -15,17 +15,25 @@ function imageCarousel(sliderContainer, width, height, wait, animationDelay){
   nextBtn.setAttribute('id', 'rbtn');
   previousBtn.setAttribute('id', 'lbtn');
 
+  var dots = [];
   var dotsBtn = document.createElement('div');
   dotsBtn.setAttribute('id', 'dots');
 
   for(var i=0;i<images.length;i++){
     images[i].setAttribute('class', 'images');
-    dotsBtn.appendChild(document.createElement('span'));
+    images[i].style.width = width+'px';
+    images[i].style.height = height+'px';
+    var dot = document.createElement('span');
+    dot.setAttribute('class', 'dot');
+    dot.setAttribute('id', i);
+    dotsBtn.appendChild(dot);
+    dots.push(dot);
   }
 
-  var dots = dotsBtn.getElementsByTagName('span');
-  for(var j=0;j<dots.length;j++){
-    dots[j].setAttribute('class', 'dot');
+  for(var x=0;x<dots.length;x++){
+    dots[x].addEventListener('click', function(e){
+      dotClicked(e.path[0].id);
+    });
   }
 
   container.appendChild(nextBtn);
@@ -39,10 +47,15 @@ function imageCarousel(sliderContainer, width, height, wait, animationDelay){
   slider.style.width = width*images.length+'px';
   slider.style.height = height+'px';
 
-  nextBtn.addEventListener('click', nextBtnClicked);
-  previousBtn.addEventListener('click', previousBtnClicked);
+  nextBtn.addEventListener('click', function(){
+    nextBtnClicked();
+  });
+  previousBtn.addEventListener('click', function(){
+    previousBtnClicked();
+  });
 
-  var y = 2;
+
+  var x = 0;
   var flag = 1;
   var change = -1;
   var count = 0;
@@ -54,33 +67,30 @@ function imageCarousel(sliderContainer, width, height, wait, animationDelay){
   init();
 
   function slide(){
-    slider.style.left = y+'px';
+    slider.style.left = x+'px';
     updateDotColor();
-    if(y==((images.length-1)*width*change)){
+    if(x==((images.length-1)*width*change)){
       change = 1;
       flag = -1;
-    }else if(y == 0){
+    }else if(x == 0){
       change = -1;
       flag = 1;
     }
-    if(y==count*width*change*flag){
+    if(x==count*width*change*flag){
       clearInterval(newInterval);
       clearInterval(mainInterval);
       hold = setTimeout(init, wait);
-      if(flag == 1){
-        count++;
-      }else if(flag == -1){
-        count--;
-      }
+      if(flag == 1) count++;
+      else if(flag == -1) count--;
     }
-    y += move*change;
+    x += move*change;
   }
 
   function init(){
     mainInterval = setInterval(slide, animationDelay);
   }
 
-  function nextBtnClicked(e){
+  function nextBtnClicked(){
     if(flag==-1){
       flag=1;
       change=-1;
@@ -92,7 +102,7 @@ function imageCarousel(sliderContainer, width, height, wait, animationDelay){
     newInterval = setInterval(slide, 1);
   }
 
-  function previousBtnClicked(e){
+  function previousBtnClicked(){
     if(flag==1){
       flag=-1;
       change=1;
@@ -104,19 +114,28 @@ function imageCarousel(sliderContainer, width, height, wait, animationDelay){
     newInterval = setInterval(slide, 1);
   }
 
+  function dotClicked(id){
+    if(id>count){
+      flag = 1;
+      change = -1;
+      count = id;
+    }else if(id<count){
+      flag = -1;
+      change = 1;
+      count = id;
+    }
+    clearInterval(mainInterval);
+    clearInterval(newInterval);
+    clearTimeout(hold);
+    newInterval = setInterval(slide, 1);
+  }
+
   function updateDotColor(){
-    if(flag == 1 && (y==count*width*change*flag+width/2 || y==count*width*change*flag)){
-      dots[count].setAttribute('class', 'dot-active');
-      if(count!=0){
-        dots[(count-1)].setAttribute('class', 'dot');
-      }
-    }else if(flag == -1 && (y==(count+1)*width*change*flag+width/2 || y==count*width*change*flag)){
-      dots[count].setAttribute('class', 'dot-active');
-      if(count!=images.length-1){
-        dots[(count+1)].setAttribute('class', 'dot');
-      }
+    for(var i=0;i<dots.length;i++){
+      if(x==i*width*change*flag) dots[i].classList.add('active');
+      else dots[i].classList.remove('active');
     }
   }
 
 }
-imageCarousel('slider-container', 750, 500, 1000, 10);
+imageCarousel('slider-container', 750, 500, 1000, 7);
