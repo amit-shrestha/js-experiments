@@ -39,6 +39,14 @@
   display: inline-block;
   margin-left: 10px;
 }
-.dot:hover{
-  background-color: white;
+.dot-active{
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background-color: lightgreen;
+  display: inline-block;
+  margin-left: 10px;
+}
+.dot:hover, .dot-active:hover{
+  background-color: blue;
 }

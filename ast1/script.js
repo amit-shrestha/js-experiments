@@ -39,6 +39,9 @@ function imageCarousel(sliderContainer, width, height, wait, animationDelay){
   slider.style.width = width*images.length+'px';
   slider.style.height = height+'px';
 
+  nextBtn.addEventListener('click', nextBtnClicked);
+  previousBtn.addEventListener('click', previousBtnClicked);
+
   var y = 2;
   var flag = 1;
   var change = -1;
@@ -48,8 +51,11 @@ function imageCarousel(sliderContainer, width, height, wait, animationDelay){
   var newInterval;
   var hold;
 
-  this.slide = function(){
+  init();
+
+  function slide(){
     slider.style.left = y+'px';
+    updateDotColor();
     if(y==((images.length-1)*width*change)){
       change = 1;
       flag = -1;
@@ -60,7 +66,7 @@ function imageCarousel(sliderContainer, width, height, wait, animationDelay){
     if(y==count*width*change*flag){
       clearInterval(newInterval);
       clearInterval(mainInterval);
-      hold = setTimeout(this.init, 1000);
+      hold = setTimeout(init, wait);
       if(flag == 1){
         count++;
       }else if(flag == -1){
@@ -70,11 +76,11 @@ function imageCarousel(sliderContainer, width, height, wait, animationDelay){
     y += move*change;
   }
 
-  this.init = function(){
-    mainInterval = setInterval(this.slide, 10);
+  function init(){
+    mainInterval = setInterval(slide, animationDelay);
   }
 
-  nextBtn.addEventListener('click', function(e){
+  function nextBtnClicked(e){
     if(flag==-1){
       flag=1;
       change=-1;
@@ -83,10 +89,10 @@ function imageCarousel(sliderContainer, width, height, wait, animationDelay){
     clearInterval(mainInterval);
     clearInterval(newInterval);
     clearTimeout(hold);
-    newInterval = setInterval(this.slide, 1);
-  });
+    newInterval = setInterval(slide, 1);
+  }
 
-  previousBtn.addEventListener('click', function(e){
+  function previousBtnClicked(e){
     if(flag==1){
       flag=-1;
       change=1;
@@ -95,8 +101,22 @@ function imageCarousel(sliderContainer, width, height, wait, animationDelay){
     clearInterval(mainInterval);
     clearInterval(newInterval);
     clearTimeout(hold);
-    newInterval = setInterval(this.slide, 1);
-  });
+    newInterval = setInterval(slide, 1);
+  }
+
+  function updateDotColor(){
+    if(flag == 1 && (y==count*width*change*flag+width/2 || y==count*width*change*flag)){
+      dots[count].setAttribute('class', 'dot-active');
+      if(count!=0){
+        dots[(count-1)].setAttribute('class', 'dot');
+      }
+    }else if(flag == -1 && (y==(count+1)*width*change*flag+width/2 || y==count*width*change*flag)){
+      dots[count].setAttribute('class', 'dot-active');
+      if(count!=images.length-1){
+        dots[(count+1)].setAttribute('class', 'dot');
+      }
+    }
+  }
 
 }
-new imageCarousel('slider-container', 750, 500, 1000, 10).init();
+imageCarousel('slider-container', 750, 500, 1000, 10);
