@@ -1,6 +1,6 @@
 mainHeight = 500;
 mainWidth = 750;
-numberOfBoxes =10;
+numberOfBoxes =40;
 var boxArray=[];
 var properties={};
 var res;
@@ -33,6 +33,7 @@ function detectPreCollision(property){
       return true;
     }
   }
+  return false;
 }
 function generateProperties(){
   do{
@@ -101,7 +102,7 @@ function Box(properties){
     });
   }
 }
-function Game(){
+function game(){
   var interval;
   container.style.width = mainWidth+'px';
   container.style.height = mainHeight+'px';
@@ -120,4 +121,4 @@ function Game(){
     });
   }
 }
-new Game().init();
+new game().init();
