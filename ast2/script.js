@@ -1,6 +1,6 @@
 mainHeight = 500;
 mainWidth = 750;
-numberOfBoxes =40;
+numberOfBoxes =10;
 var boxArray=[];
 var properties={};
 var res;
