@@ -1,0 +1,30 @@
+.wrapper{
+  width: 100%;
+}
+.word-container{
+  width: 80%;
+  height: 500px;
+  margin: 0 auto;
+  background-color: lightgrey; 
+  position: relative;
+}
+.text-input{
+  width: 50%;
+  height: 40px;
+  margin: 0 auto;
+  border: 1px solid black;
+}
+.game-over{
+  color: red;
+  position: absolute;
+  width: 50%;
+  height: 100px;
+  background-color: lightslategray;
+  font-weight: bolder;
+  font-size: 40px;
+  text-align: center;
+  left: 25%;
+  top: 30%;
+  display: none;
+  z-index: 1;
+}
